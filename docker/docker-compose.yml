@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+    cf2023:
+        build:
+            context: ./cf2023
+        environment:
+            - acceptEULA=YES
+            - password=${CF_PASSWORD}
+        volumes:
+            - ../src:/app/src
+            - ../var/log/coldfusion/:/opt/coldfusion/cfusion/logs
+        ports:
+            - "8523:8500"
+        stdin_open: true
+        tty: true
