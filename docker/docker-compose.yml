@@ -5,13 +5,45 @@ services:
         build:
             context: ./cf2023
         environment:
+            - MARIADB_DATABASE=${MARIADB_DATABASE}
+            - MARIADB_USER=${MARIADB_USER}
+            - MARIADB_PASSWORD=${MARIADB_PASSWORD}
             - acceptEULA=YES
             - password=${CF_PASSWORD}
         volumes:
-            - ../src/:/app/src/
-            - ../../cfml/:/app/cfml/
+            - ../:/app/
             - ../var/log/coldfusion/:/opt/coldfusion/cfusion/logs/
         ports:
             - "8523:8500"
         stdin_open: true
         tty: true
+        networks:
+            - backend
+
+    mariadb:
+        build:
+            context: ./mariadb
+        environment:
+            - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+            - MARIADB_DATABASE=${MARIADB_DATABASE}
+            - MARIADB_USER=${MARIADB_USER}
+            - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+        ports:
+            - "3323:3306"
+        volumes:
+            - mariaDbData:/var/lib/mariadb
+            - ./mariadb/root_home:/root
+            - ../var/log:/var/log
+        stdin_open: true
+        tty: true
+        networks:
+            backend:
+                aliases:
+                    - database.backend
+
+volumes:
+    mariaDbData:
+
+networks:
+    backend:
+        driver: "bridge"

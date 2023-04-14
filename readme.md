@@ -1,14 +1,17 @@
-# CF2023 container
+# CF2023 beta test environment
 
 This is the config for a minimal(-ish) Docker container running CF2023.
 
-I've installed vim in it as well as I never don't need it,
+It also includes a MariaDB container with a minimal test DB.
+
+I've installed vim in the containers as well as I never don't need it,
 so why dick around not having it?
 
 I add bash aliases for `ll` and `cls` as they're handy
 (sorry the latter is cos I'm a perennial Windows user. Shrug).
 
-I've exposed the container's port `8500` as `8523` on the host.
+I've exposed the ColdFusion container's port `8500` as `8523` on the host,
+and the MariaDB's `3306`` on `3323`.
 
 I map the `src` directory of this project
 to the `/app/src` directory in the container.
@@ -27,9 +30,16 @@ I've installed the CF debugger module as otherwise one can't switch on
 Robust Exception Handling, which is a hard requirement for dev, I think.
 
 There's a shell script `docker/rebuildContainer.sh`.
-Use this to (re)build the container:
+Use this to (re)build the containers:
 
 ```
-~/cf2023/docker$ ./rebuildContainer.sh 123
+./rebuildContainers.sh [cf admin password] [DB root password] [DB user password]
 ```
-All it does is remove any existing container, rebuild it, and bring it up.
+
+EG:
+
+```
+~/src/cf2023/docker$ ./rebuildContainers.sh 12345 123 1234
+```
+
+All it does is remove any existing containers, rebuild them, and brings them up.
