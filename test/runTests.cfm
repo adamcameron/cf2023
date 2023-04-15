@@ -1,4 +1,6 @@
 <cfscript>
+
+    throw "wooooo";
     import testbox.system.TestBox
 	param URL.testBundles="";
 	if (URL.testBundles.len()) {

@@ -12,6 +12,9 @@ COPY ./lib/mysql-connector-java-8.0.28.jar /opt/coldfusion/cfusion/lib/mysql-con
 WORKDIR  /app
 
 RUN /opt/coldfusion/cfusion/bin/cfpm.sh install debugger
+RUN sed -i \
+    "s/<var name='robust_enabled'><boolean value='[^']*'\/><\/var>/<var name='robust_enabled'><boolean value='true'\/><\/var>/g" \
+    /opt/coldfusion/cfusion/lib/neo-debug.xml
 
 COPY ./commandbox.properties /usr/local/bin/commandbox.properties
 
